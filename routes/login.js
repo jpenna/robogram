@@ -10,7 +10,6 @@ const login = express.Router();
 
 login.use(express.static(path.join(__dirname, '.../views')));
 
-
 login.use(bodyParser.urlencoded({extended: false}));
 login.use(bodyParser.json());
 
@@ -22,50 +21,33 @@ const me_endpoint_base_url = 'https://graph.accountkit.com/v1.1/me';
 const token_exchange_base_url = 'https://graph.accountkit.com/v1.1/access_token';
 
 
-// login.get('/', function (req, res, next) {
-//     res.sendFile('chatRoom.html', {root: path.join(__dirname, '/dist')});
-// });
-
-
-// login page logic
-// function loadLogin() {
-//     return fs.readFileSync('dist/login.html').toString();
-// }
-
 login.get('/', function (req, res, next) {
     if (false == true) { //replace false for check login
         next('chat');
+    } else {
+
+        var view = {
+            appId: app_id,
+            csrf: csrf_guid,
+            version: account_kit_api_version
+        };
+
+        //TODO descomentar aqui e tirar debaixo, já vai começar a fazer o login e depois ir para o chat
+        // res.render('login', view);
+        res.render('chatRoom', view);
     }
-
-    var view = {
-        appId: app_id,
-        csrf: csrf_guid,
-        version: account_kit_api_version
-    };
-
-    res.render('login', view);
-
-
-    // var html = Mustache.to_html(loadLogin(), view);
-    // response.send(html);
-    // response.sendFile('login.html', {root: path.join(__dirname, '/dist')});
 });
 
 
-// login success
-function loadLoginSuccess() {
-    return fs.readFileSync('dist/chatRoom.html').toString();
-}
-
-login.post('/sendcode', function (request, response) {
-    console.log('code: ' + request.body.code);
+login.post('/sendcode', function (req, res) {
+    console.log('code: ' + req.body.code);
 
     // CSRF check
-    if (request.body.csrf_nonce === csrf_guid) {
+    if (req.body.csrf_nonce === csrf_guid) {
         var app_access_token = ['AA', app_id, app_secret].join('|');
         var params = {
             grant_type: 'authorization_code',
-            code: request.body.code,
+            code: req.body.code,
             access_token: app_access_token
         };
 
@@ -87,15 +69,15 @@ login.post('/sendcode', function (request, response) {
                 } else if (respBody.email) {
                     view.email_addr = respBody.email.address;
                 }
-                var html = Mustache.to_html(loadLoginSuccess(), view);
-                response.send(html);
+
+                res.render('chatRoom', view);
             });
         });
     }
     else {
         // login failed
-        response.writeHead(200, {'Content-Type': 'text/html'});
-        response.end("Something went wrong. :( ");
+        res.writeHead(200, {'Content-Type': 'text/html'});
+        res.end("Something went wrong. :( ");
     }
 });
 

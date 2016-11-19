@@ -2,10 +2,11 @@ doctype html
 html
 head
     // HTTPS required. HTTP will give a 403 forbidden response
-    script(src="https://sdk.accountkit.com/en_US/sdk.js")
-    link(rel='stylesheet', href='/stylesheets/style.css')
+
+    link(rel='stylesheet' href='/stylesheets/style.css')
 
 body
+    script(src="https://sdk.accountkit.com/en_US/sdk.js")
     script.
         window.fbAsyncInit = function () {
             FB.init({

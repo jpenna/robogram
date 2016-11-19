@@ -1,13 +1,15 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const querystring = require('querystring');
 
-var app = express();
+const app = express();
 
-var login = require('./routes/login');
+const login = require('./routes/login');
+const telebot = require('./routes/telebot');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -21,10 +23,28 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.all(telebot); //qual metodo chega? não precisa passar todos por aqui
+
 app.use('/', login);
 
+app.post('/sendBot', function (req, res, next) {
+    var request = require('request');
 
+    var text = req.body.text;
+    console.log(text);
 
+    var formData = {
+        chat_id: 231095546,
+        text: text
+    };
+    request.post({url:'https://api.telegram.org/bot266093667:AAEU-ML9BamR6jQEMPFKMcOGPdxKGrZNyCM/sendMessage',
+        formData: formData}, function optionalCallback(err, httpResponse, body) {
+        if (err) {
+            return console.error('upload failed:', err);
+        }
+        console.log('Request sent!  Server responded with:', body);
+    });
+});
 
 
 
