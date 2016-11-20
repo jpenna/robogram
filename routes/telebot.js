@@ -1,40 +1,55 @@
 var botgram = require('botgram');
 var bot = botgram("266093667:AAEU-ML9BamR6jQEMPFKMcOGPdxKGrZNyCM");
 
-bot.command("start", function (msg, reply, next) {
-    console.log("Received a /start command from", msg.from.username);
-});
+var io;
+var response;
 
-bot.text(function (msg, reply, next) {
-    console.log(msg);
-    console.log("Received a text message:", msg.text);
+function reply(msg) {
+    io.send('Telebot: ' + msg);
+    response.text(msg);
+}
+
+bot.all(function (req, res, next) {
+    response = res;
+    io.send(req.chat.firstname + ': ' + req.text);
     next();
 });
 
-bot.text(function (msg, reply, next) {
-    reply.text("Hello, " + msg.chat.firstname + " " + msg.chat.lastname + "!");
-    // reply.text("How are you?");
-    // reply.text("Hope you are doing well 😄");
-    next()
+bot.command("start", function (req, res, next) {
+    let user = {name: req.chat.name};
+
+    io.newUser(user);
+
+    reply("Alllll right! Let's ROCK! 🤘️");
+    reply("Tell me, what can I do for you " + req.chat.name + "?");
 });
 
-bot.command("whereareyou", function (msg, reply, next) {
-    reply.text("I'm at:");
-    reply.location(-19.928232, -43.9439383);
-    next()
+bot.text(function (req, res, next) {
+    reply("Hi, " + req.chat.firstname + " " + req.chat.lastname + "! Try using the predefined actions 😊");
+    reply("Unfortunately I'm still a little stupid... 😅");
 });
 
-bot.command("id", function (msg, reply, next) {
-    reply.text("Your id is: " + msg.chat.id);
-    next()
+bot.command("whereareyou", function (req, res, next) {
+    reply("I'm at:");
+    response.location(-19.928232, -43.9439383);
 });
 
-bot.command("sayhi", function (msg, reply, next) {
-    reply.text("Hi!");
-    next()
+bot.command("id", function (req, res, next) {
+    reply("Your id is: " + req.chat.id);
 });
 
-bot.photo(function (msg, reply, next) {
-    reply.sticker("BQADAgAD3gAD9HsZAAFphGBFqImfGAI");
-    next()
+bot.command("sayhi", function (req, res, next) {
+    reply("Hi!");
 });
+
+bot.command("saybye", function (req, res, next) {
+    reply("See you later!");
+});
+
+bot.all(function (req, res, next) {
+    reply("Hummm, that seems nice... I don't know...");
+});
+
+module.exports = function telebot(websocketIO) {
+    io = websocketIO;
+}

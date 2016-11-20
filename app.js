@@ -5,50 +5,46 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const querystring = require('querystring');
+const request = require('request');
+const login = require('./routes/login');
 
 const app = express();
 
-const login = require('./routes/login');
+var http = require('http').Server(app);
+
+const io = require('./routes/io');
+
+io.init(http);
+
 const telebot = require('./routes/telebot');
+telebot(io);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
-//login.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// app.use(favicon(path.join(__dirname, 'public', 'favicon-32x32.png')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
+
+//static paths
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/scripts', express.static(path.join(__dirname, 'node_modules/socket.io-client/')));
 
 app.all(telebot); //qual metodo chega? não precisa passar todos por aqui
 
 app.use('/', login);
 
-app.post('/sendBot', function (req, res, next) {
-    var request = require('request');
-
-    var text = req.body.text;
-    console.log(text);
-
-    var formData = {
-        chat_id: 231095546,
-        text: text
-    };
-    request.post({url:'https://api.telegram.org/bot266093667:AAEU-ML9BamR6jQEMPFKMcOGPdxKGrZNyCM/sendMessage',
-        formData: formData}, function optionalCallback(err, httpResponse, body) {
-        if (err) {
-            return console.error('upload failed:', err);
-        }
-        console.log('Request sent!  Server responded with:', body);
-    });
-});
 
 
 
 
+
+// ----------------------------------
+// errors and server
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
@@ -67,9 +63,8 @@ app.use(function (err, req, res, next) {
     res.render('error');
 });
 
-
-module.exports = app;
-
-app.listen(3000, function () {
+http.listen(3000, function () {
     console.log('Example login listening on port 3000!');
 });
+
+module.exports = app;
