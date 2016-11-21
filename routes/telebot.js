@@ -1,25 +1,27 @@
-var botgram = require('botgram');
-var bot = botgram("266093667:AAEU-ML9BamR6jQEMPFKMcOGPdxKGrZNyCM");
+const botgram = require('botgram'),
+      bot = botgram("266093667:AAEU-ML9BamR6jQEMPFKMcOGPdxKGrZNyCM"),
+      controller = require('../controller/controller');
 
-var io;
+var request;
 var response;
 
 function reply(msg) {
-    io.send('Telebot: ' + msg);
-    response.text(msg);
+    controller.handleBotReply(request, response, msg);
 }
 
+bot.command("start", function (req, res, next) {
+    controller.handleFirstContact(req, res);
+    next();
+});
+
 bot.all(function (req, res, next) {
+    request = req;
     response = res;
-    io.send(req.chat.firstname + ': ' + req.text);
+    controller.handleIncomingMessage(req);
     next();
 });
 
 bot.command("start", function (req, res, next) {
-    let user = {name: req.chat.name};
-
-    io.newUser(user);
-
     reply("Alllll right! Let's ROCK! 🤘️");
     reply("Tell me, what can I do for you " + req.chat.name + "?");
 });
@@ -32,6 +34,7 @@ bot.text(function (req, res, next) {
 bot.command("whereareyou", function (req, res, next) {
     reply("I'm at:");
     response.location(-19.928232, -43.9439383);
+    controller.sendGuiOnly(req, 'I sent a map with the location (-19.928232, -43.9439383) to your Telegram App!');
 });
 
 bot.command("id", function (req, res, next) {
@@ -50,6 +53,6 @@ bot.all(function (req, res, next) {
     reply("Hummm, that seems nice... I don't know...");
 });
 
-module.exports = function telebot(websocketIO) {
-    io = websocketIO;
-}
+// module.exports = function telebot(websocketIO) {
+//     websocket = websocketIO;
+// }

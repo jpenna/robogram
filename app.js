@@ -1,23 +1,47 @@
 const express = require('express');
 const path = require('path');
-const favicon = require('serve-favicon');
+// const favicon = require('serve-favicon');
 const logger = require('morgan');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const querystring = require('querystring');
+// const cookieParser = require('cookie-parser');
+// const bodyParser = require('body-parser');
+// const querystring = require('querystring');
 const request = require('request');
+
+var app = express();
+
 const login = require('./routes/login');
 
-const app = express();
-
 var http = require('http').Server(app);
+mySocket = require('socket.io')(http);
 
-const io = require('./routes/io');
+var webIO = require('./routes/webIO');
 
-io.init(http);
+// require('./controller/websocket')(http);
+
+const controller = require('./controller/controller');
+
+(function receiveFromSocket () {
+    mySocket.on('connection', function (socket) {
+        console.log('a user connected');
+
+        socket.on('chat message', function (data) {
+            controller.handleFromSocket(data);
+        });
+
+        socket.on('disconnect', function () {
+            console.log('user disconnected');
+        });
+    });
+})();
+
+
+// var websocket = io.init(http);
+// console.log('websocket', websocket);
+
+
+
 
 const telebot = require('./routes/telebot');
-telebot(io);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -25,10 +49,10 @@ app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon-32x32.png')));
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(cookieParser());
+// app.use(logger('dev'));
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({extended: false}));
+// app.use(cookieParser());
 
 //static paths
 app.use(express.static(path.join(__dirname, 'public')));
@@ -64,7 +88,7 @@ app.use(function (err, req, res, next) {
 });
 
 http.listen(3000, function () {
-    console.log('Example login listening on port 3000!');
+    console.log('Listening on port 3000!');
 });
 
 module.exports = app;

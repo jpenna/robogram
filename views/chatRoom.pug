@@ -10,40 +10,41 @@ head
         socket = io();
 body
 
-#chats(style={width: '200px', height: '100%'})
+    #chats(style={width: '200px', height: '100%'})
 
-div(style={float: 'right', height: '100%'})
-    #chatBox
+    div(style={float: 'right', height: '100%'})
+        #chatBox
 
-    #messageBox
-        form#messageForm(action="/sendBot" method="post")
-            input#messageInput(type="text" name="text")
-            button#sendButton(type="submit") Send
-
-
-script.
-    var messageForm = document.getElementById('messageForm');
-    var messageInput = document.getElementById('messageInput');
-    var chatBox = document.getElementById('chatBox');
-    var chats = document.getElementById('chats');
-
-    messageForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        var text = messageInput.value;
-        console.log(text);
-
-        socket.emit('chat message', text);
-
-        chatBox.innerHTML += 'Telebot-user: ' + messageInput.value + '<br><br>';
-        messageInput.value = "";
-    })
-
-    socket.on('chat message', function (msg) {
-        chatBox.innerHTML += msg + '<br><br>';
-    });
+        #messageBox
+            form#messageForm(action="/sendBot" method="post")
+                input#messageInput(type="text" name="text")
+                button#sendButton(type="submit") Send
 
 
-    socket.on('new user', function (user) {
-        chats.innerHTML += '<div>' + user.name + '</div>';
-    });
+    script.
+        var messageForm = document.getElementById('messageForm');
+        var messageInput = document.getElementById('messageInput');
+        var chatBox = document.getElementById('chatBox');
+        var chats = document.getElementById('chats');
+
+        messageForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            var text = messageInput.value;
+
+            var data = {
+                text: text
+            }
+            socket.emit('chat message', data);
+
+            chatBox.innerHTML += 'Telebot[user]: ' + text + '<br><br>';
+            messageInput.value = "";
+        })
+
+        socket.on('chat message', function (msgObj) {
+            chatBox.innerHTML += msgObj.name + ': ' + msgObj.text + '<br><br>';
+        });
+
+        socket.on('new user', function (user) {
+            chats.innerHTML += '<div>' + user.name + '</div>';
+        });
