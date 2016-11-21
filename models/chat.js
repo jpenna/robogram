@@ -1,4 +1,8 @@
-const doConnectAnd = require('../controller/connectionFactory');
+var refs = require('../helper/refs'),
+    MongoClient = require('mongodb').MongoClient;
+
+// Connection URL
+var url = refs.MONGODB_URL;
 
 // Module to export
 var chatExport = {};
@@ -31,19 +35,17 @@ chatExport.models = {
  * */
 chatExport.insertClient = function (data) {
 
-    return doConnectAnd(
-        function (db, callback) {
-            var collection = db.collection('chats');
+    MongoClient.connect(url).then(function (db) {
+        console.log("Connected successfully to MongoDB server");
+        var collection = db.collection('chats');
 
-            collection.insertOne(data, function (err, result) {
-                if (err === null) {
-                    callback();
-                    return result.result.n == 1;
-                }
+        collection.insertOne(data, function (err, result) {
+            db.close();
+            if (err !== null) {
                 console.log(err);
-                return false;
-            });
+            }
         });
+    });
 }
 
 /**
@@ -55,75 +57,46 @@ chatExport.insertClient = function (data) {
  *
  * */
 chatExport.insertMessage = function (chatId, data) {
-    return doConnectAnd(
-        function (db, callback) {
-            var collection = db.collection('chats');
+    MongoClient.connect(url).then(function (db) {
+        console.log("Connected successfully to MongoDB server");
 
-            collection.updateOne({"chat_id": chatId},
-                {
-                    $push: {"conversation": data}
-                },
-                function (err, result) {
-                    if (err === null) {
-                        callback();
-                        return result.result.n == 1;
-                    }
-                    console.log(err);
-                    return false;
-                })
-        });
+        var collection = db.collection('chats');
+
+        collection.updateOne({"chat_id": chatId},
+            {
+                $push: {"conversation": data}
+            },
+            function (err, result) {
+                db.close();
+                if (err === null) {
+                    return result.result.n == 1;
+                }
+                console.log(err);
+                return false;
+            })
+    });
+
 
 }
 
-//
-// var findDocuments = function (db, callback) {
-//     // Get the documents collection
-//     var collection = db.collection('documents');
-//     // Find some documents
-//     collection.find({}).toArray(function (err, docs) {
-//         assert.equal(err, null);
-//         console.log("Found the following records");
-//         console.log(docs)
-//         callback(docs);
-//     });
-// }
-//
-// var updateDocument = function (db, callback) {
-//     // Get the documents collection
-//     var collection = db.collection('documents');
-//     // Update document where a is 2, set b equal to 1
-//     collection.updateOne({a: 2}
-//         , {$set: {b: 1}}, function (err, result) {
-//             assert.equal(err, null);
-//             assert.equal(1, result.result.n);
-//             console.log("Updated the document with the field a equal to 2");
-//             callback(result);
-//         });
-// }
-//
-// var removeDocument = function (db, callback) {
-//     // Get the documents collection
-//     var collection = db.collection('documents');
-//     // Insert some documents
-//     collection.deleteMany({adddd: 1}, function (err, result) {
-//         assert.equal(err, null);
-//         // assert.equal(1, result.result.n);
-//         console.log("Removed: " + result.result.n);
-//         callback(result);
-//     });
-// }
-//
-// //add index
-// var indexCollection = function (db, callback) {
-//     db.collection('documents').createIndex(
-//         {"a": 1},
-//         null,
-//         function (err, results) {
-//             console.log(results);
-//             callback();
-//         }
-//     );
-// };
+/**
+ * Method get people in chats
+ *
+ * @return items promisse list of chats and conversations
+ *
+ * */
+chatExport.getChat = function () {
+
+    return MongoClient.connect(url).then(function (db) {
+        console.log("Connected successfully to MongoDB server");
+
+        var collection = db.collection('chats');
+
+        return collection.find({}).toArray()
+    }).then(function(items) {
+        return items;
+    });
+}
 
 
 module.exports = chatExport;

@@ -25,7 +25,7 @@ const controller = require('./controller/controller');
         console.log('a user connected');
 
         socket.on('chat message', function (data) {
-            controller.handleFromSocket(data);
+            controller.handleFromGui(data);
         });
 
         socket.on('disconnect', function () {

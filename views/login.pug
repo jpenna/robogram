@@ -12,7 +12,8 @@ body
             FB.init({
                 appId: '1766166693650560',
                 xfbml: true,
-                version: 'v2.8'
+                version: 'v2.8',
+                debug: true
             });
         };
 
@@ -28,7 +29,7 @@ body
         }(document, 'script', 'facebook-jssdk'));
 
     | Enter country code (e.g. +1):
-    input#country-code(type="text")
+    input#country_code(type="text")
     | Enter phone number without spaces (e.g. 444555666):
     input#phone_num(type="text")
     button(onclick="phone_btn_onclick()") Login via SMS

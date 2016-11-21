@@ -1,6 +1,6 @@
 const botgram = require('botgram'),
-      bot = botgram("266093667:AAEU-ML9BamR6jQEMPFKMcOGPdxKGrZNyCM"),
-      controller = require('../controller/controller');
+    bot = botgram("266093667:AAEU-ML9BamR6jQEMPFKMcOGPdxKGrZNyCM"),
+    controller = require('../controller/controller');
 
 var request;
 var response;

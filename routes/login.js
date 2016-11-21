@@ -7,6 +7,8 @@ const bodyParser = require("body-parser");
 const Request = require('request');
 const Querystring = require('querystring');
 const login = express.Router();
+const controller = require('../controller/controller');
+
 
 login.use(express.static(path.join(__dirname, '.../views')));
 
@@ -32,9 +34,8 @@ login.get('/', function (req, res, next) {
             version: account_kit_api_version
         };
 
-        //TODO descomentar aqui e tirar debaixo, já vai começar a fazer o login e depois ir para o chat
-        // res.render('login', view);
-        res.render('chatRoom', view);
+        res.render('login', view);
+
     }
 });
 
@@ -70,7 +71,32 @@ login.post('/sendcode', function (req, res) {
                     view.email_addr = respBody.email.address;
                 }
 
-                res.render('chatRoom', view);
+                controller.getChats()
+                    .then(function (items) {
+                        console.info('em login', items);
+
+                        var jsonMessages = [];
+                        var jsonClients = [];
+
+                        for (let i = 0; i < items.length; i++) {
+                            jsonClients.push({
+                                chat_id: items[i].chat_id,
+                                name: items[i].first_name + ' ' + items[i].last_name,
+                                last_conversation: jsonMessages.conversation[jsonMessages.conversation.length -1]
+                            });
+                            jsonMessages = items[i].conversation;
+                        }
+
+                        var view = {
+                            jsonMessages: JSON.stringify(jsonMessages),
+                            jsonClients: JSON.stringify(jsonClients)
+                        }
+
+                        res.render('chatRoom', view);
+
+                    }, function (err) {
+                        console.error('The promise was rejected', err, err.stack);
+                    });
             });
         });
     }

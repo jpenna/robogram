@@ -5,6 +5,9 @@ head
 
     link(rel="icon" type="image/png" sizes="32x32" href="/img/favicon/favicon-32x32.png")
 
+    script(src="https://code.jquery.com/jquery-3.1.1.min.js"
+    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    crossorigin="anonymous")
     script(src="/scripts/socket.io.js")
     script.
         socket = io();
@@ -35,6 +38,7 @@ body
             var data = {
                 text: text
             }
+
             socket.emit('chat message', data);
 
             chatBox.innerHTML += 'Telebot[user]: ' + text + '<br><br>';
@@ -42,9 +46,37 @@ body
         })
 
         socket.on('chat message', function (msgObj) {
+
+            //        text: obj.text,
+            //                date
+            //        :
+            //        new Date(),
+            //                chat_id
+            //        :
+            //        obj.chat_id,
+            //                name
+            //        :
+            //        refs.TELEBOT_NAME
+
             chatBox.innerHTML += msgObj.name + ': ' + msgObj.text + '<br><br>';
         });
+
 
         socket.on('new user', function (user) {
             chats.innerHTML += '<div>' + user.name + '</div>';
         });
+
+        function populateMessages (obj) {
+            $.each(obj, function(key, value) {
+                chatBox.innerHTML += value.name + ': ' + value.text + '<br><br>';
+            });
+        }
+
+        function populateClients(obj) {
+            $.each(obj, function (key, value) {
+                chats.innerHTML += '<div>' + value.name + '</div>';
+            });
+        }
+
+        populateClients(!{jsonClients});
+        populateMessages(!{jsonMessages});

@@ -1,11 +1,11 @@
 const refs = require('../helper/refs'),
-      request = require('request'),
-      chatModel = require('../models/chat'),
-       webIO = require('../routes/webIO');
+    request = require('request'),
+    chatModel = require('../models/chat'),
+    webIO = require('../routes/webIO');
 
 var controller = {};
 
-controller.handleFromSocket = function (data) {
+controller.handleFromGui = function (data) {
     var chatId = 231095546;
 
     var msgData = {
@@ -55,14 +55,16 @@ controller.handleFirstContact = function (req, res) {
         last_name: req.chat.lastname
     }
 
-    if (chatModel.insertClient(chat)) {
-        console.log('Client Inserted');
-    } else {
-        console.log('Error inserting new client')
+    chatModel.insertClient(chat);
+
+    var user = {
+        name: chat.first_name + " " + chat.last_name
     }
+    webIO.sendNewUser(user);
+
 }
 
-controller.handleIncomingMessage = function(req) {
+controller.handleIncomingMessage = function (req) {
     var msgData = {
         name: req.chat.firstname,
         text: req.text,
@@ -90,6 +92,14 @@ controller.sendGuiOnly = function (request, msg) {
 
     msgData.chat_id = chatId;
     webIO.sendMessageChat(msgData);
+}
+
+controller.getChats = function() {
+    return chatModel.getChat().then(function(items) {
+        return items;
+    }, function(err) {
+        console.error('The promise was rejected', err, err.stack);
+    });
 }
 
 module.exports = controller;
