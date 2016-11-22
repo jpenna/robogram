@@ -3,7 +3,10 @@ html
 head
     // HTTPS required. HTTP will give a 403 forbidden response
 
-    link(rel='stylesheet' href='/stylesheets/style.css')
+    link(rel='stylesheet' href='/stylesheets/bulma/css/bulma.css')
+    link(rel='stylesheet' href='/stylesheets/css/utils.css')
+    link(rel='stylesheet' href='/stylesheets/css/login.css')
+
 
 body
     script(src="https://sdk.accountkit.com/en_US/sdk.js")
@@ -28,14 +31,49 @@ body
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
 
-    | Enter country code (e.g. +1):
-    input#country_code(type="text")
-    | Enter phone number without spaces (e.g. 444555666):
-    input#phone_num(type="text")
-    button(onclick="phone_btn_onclick()") Login via SMS
-    | Enter email address
-    input#email(type="text")
-    button(onclick="email_btn_onclick()") Login via Email
+    .login-box
+        .login-welcome-box
+            .login-welcome WELCOME
+            .login-little LITTLE ONE
+        .login-sub-box
+            .login-sub-up.
+                Let the #[span.login-highlight bot] do your work
+            .lobin-sub-sub - or not -
+        .login-chose-box
+            .login-chose Chose your way in!
+            .level.login-level
+                .level-item.has-text-centered
+                    span
+                        button.no-button(onclick="phone_btn_onclick()")
+                            figure
+                                img.phone(src="/img/phone.png")
+                                figcaption.login-figcaption SMS
+                .level-item.has-text-centered
+                    span
+                        button.no-button(onclick="email_btn_onclick()")
+                            figure
+                                img.email(src="/img/email.png")
+                                figcaption.login-figcaption E-MAIL
+
+
+            //.login-icons
+            //    span.login-btn-span
+            //        button.no-button.login-button(onclick="phone_btn_onclick()")
+            //            figure
+            //                img.phone(src="/img/phone.png")
+            //                figcaption.login-figcaption SMS
+            //    span.login-btn-span
+            //        button.no-button.login-button(onclick="email_btn_onclick()")
+            //            figure
+            //                img.email(src="/img/email.png")
+            //                figcaption.login-figcaption E-MAIL
+    //input#country_code(type="text")
+    //| Enter phone number without spaces (e.g. 444555666):
+    //input#phone_num(type="text")
+    //button(onclick="phone_btn_onclick()") Login via SMS
+    //| Enter email address
+    //input#email(type="text")
+    //button(onclick="email_btn_onclick()") Login via Email
 
     form#my_form(action="/sendcode" method="post" hidden)
         input#code(type="text"  name="code")
@@ -72,18 +110,18 @@ body
 
         // phone form submission handler
         function phone_btn_onclick() {
-            var country_code = document.getElementById("country_code").value;
-            var ph_num = document.getElementById("phone_num").value;
-            AccountKit.login('PHONE', {countryCode: country_code, phoneNumber: ph_num}, // will use default values if this is not specified
+            //            var country_code = document.getElementById("country_code").value;
+            //            var ph_num = document.getElementById("phone_num").value;
+            AccountKit.login('PHONE', {countryCode: null, phoneNumber: null}, // will use default values if this is not specified
                     loginCallback);
         }
 
 
         // email form submission handler
         function email_btn_onclick() {
-            var email_address = document.getElementById("email").value;
+            //            var email_address = document.getElementById("email").value;
 
-            AccountKit.login('EMAIL', {emailAddress: email_address}, loginCallback);
+            AccountKit.login('EMAIL', {emailAddress: null}, loginCallback);
         }
 
 

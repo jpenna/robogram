@@ -12,7 +12,13 @@ var app = express();
 const login = require('./routes/login');
 
 var http = require('http').Server(app);
-mySocket = require('socket.io')(http);
+
+const server = http.listen(3000, function () {
+    console.log('Listening on port 3000!');
+});
+
+mySocket = require('socket.io').listen(server);
+// usar
 
 var webIO = require('./routes/webIO');
 
@@ -87,8 +93,7 @@ app.use(function (err, req, res, next) {
     res.render('error');
 });
 
-http.listen(3000, function () {
-    console.log('Listening on port 3000!');
-});
+
+
 
 module.exports = app;

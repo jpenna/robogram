@@ -1,0 +1,196 @@
+@import "utils"
+@import "../font-awesome-4.7.0/css/font-awesome.min.css"
+
+body
+  font-weight: 300
+
+.column
+  margin: 0 !important
+  padding: 0 !important
+
+.panel
+  margin: 0 !important
+  border: none
+
+.panel-block
+  border-bottom: none !important
+  width: 100%
+
+.level
+  margin-bottom: 0 !important
+
+// Telebot App
+.telebot-app
+  position: absolute
+  margin: auto !important
+  right: 0
+  left: 0
+  top: 0
+  bottom: 0
+  max-height: 88%
+  padding: 0
+
+// Avatar image class (multiple uses)
+.avatar-image
+  border-radius: 50%
+  border: #d2d2d2 1px solid
+  box-shadow: #eaeaea 1px 1px 5px
+  max-width: 89px
+
+// Chat list on left panel
+.chat-list
+  border-right: 1px solid #dbdbdb
+  border-top-right-radius: 0
+  border-bottom-right-radius: 0
+  
+.chat-list-heading
+  line-height: 63px
+  padding: 0
+  padding-left: 12px
+  background-color: transparent
+  border: none
+
+.preview-button
+  &:hover
+    background-color: rgba(204, 229, 236, 0.42)
+    img
+      border: none
+      box-shadow: none
+
+.active-chat
+  $color: rgba(204, 229, 236, 1)
+
+  background-color: $color
+  img
+    border: none
+    box-shadow: none
+
+  &:hover
+    background-color: $color
+
+.preview-name
+  color: $textBlue
+  font-weight: 400
+
+.preview-text
+  font-size: 0.8rem
+  font-weight: 300
+
+.preview-time
+  font-size: 10px
+  font-weight: 300
+
+// Right panel
+.chat-container
+  position: relative
+
+// Messages space (list of messages)
+.messages-space
+  display: flex
+  flex-direction: column
+  overflow-y: scroll
+
+// Header with the client name
+.header-container
+  margin-bottom: 0
+  border-bottom: 1px solid #dbdbdb
+  display: flex
+  flex-direction: column
+  position: relative
+  z-index: 10
+  background: white
+  border-top-right-radius: 6px
+  
+.chat-name
+  line-height: 30px
+  text-align: right
+  padding: 16px 4% 16px
+
+// Messages
+.messages-space
+  overflow-y: overlay
+  height: 100%
+  position: absolute
+  width: 100%
+  top: 0
+  padding-bottom: 117px
+  padding-top: 65px
+  z-index: 1
+
+.message-box
+  padding: 18px 10% !important
+  position: relative
+
+.msg-content
+  padding-left: 3%
+
+.message-info
+  line-height: 0
+
+.client-name
+  color: #56a9c0
+  font-size: 1.18rem
+  font-weight: 400
+
+.message-text
+  font-size: 0.95rem
+  padding-right: 8%
+
+// Input container (footer)
+.input-space
+  position: absolute
+  width: 100%
+  bottom: 0
+  background: white
+  z-index: 10
+
+.input-container
+  padding: 12px 0 10px
+  margin: 0 27px
+  border-top: 1px solid #dbdbdb
+  display: flex
+  //flex-direction: column
+
+.textbox
+  border: none
+  box-shadow: none
+  border-bottom: 1px solid #dbdbdb
+  min-height: 73px
+  font-size: 0.8rem
+  width: auto
+  min-width: 83%
+  margin: auto
+  display: inline-block
+  vertical-align: middle
+
+  &:focus
+    font-size: 1rem
+
+.send-button-container
+  margin-left: 10px !important
+  vertical-align: middle
+
+.send-button
+  $left: 5px
+  $right: 11px
+  $color: #50efa7
+
+  border-top-left-radius: $left
+  border-bottom-left-radius: $left
+  border-top-right-radius: $right
+  border-bottom-right-radius: $right
+
+  outline: none
+  border: none
+
+  background-color: $color
+  height: 73px
+  width: 57px
+
+  &:hover
+    background-color: darken($color, 10%)
+
+.send-arrow
+  opacity: 0.65
+  color: white
+  font-size: 24px

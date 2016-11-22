@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel='stylesheet' href='public/stylesheets/bulma/css/bulma.css'>
+
+    <link rel='stylesheet' href='public/stylesheets/css/chatRoom.css'>
+
+
+    <meta charset="UTF-8">
+    <title>Teste</title>
+</head>
+<body>
+
+<!--telebot app-->
+<div class="box columns column is-10 is-offset-1 telebot-app">
+
+
+    <!--chat list-->
+    <div class="panel column is-3 chat-list is-hidden-mobile">
+        <p class="panel-heading chat-list-heading">
+            Contacts
+        </p>
+
+
+        <!--chat box-->
+        <button class="panel-block  no-button preview-button active-chat">
+
+            <!--card template-->
+            <div class="media">
+                <figure class="media-left">
+                    <p class="image is-64x64 is-50x50">
+                        <img class="avatar-image" src="http://placehold.it/128x128"/>
+                    </p>
+                </figure>
+                <div class="media-content">
+                    <div class="content">
+                        <div class="level">
+                            <div class="level-left">
+                                <p class="level-item preview-name">John Smith<span>
+                            </div>
+                            <div class="level-right">
+                                <small class="level-item preview-time">11:44</small>
+                            </div>
+                        </div>
+                        <p class="preview-text">Lorem ipsum dolor sit amet...</p>
+                    </div>
+                </div>
+            </div>
+        </button>
+
+
+    </div>
+
+    <!--chat container-->
+    <div class="column is-9 chat-container" style="position: relative">
+
+
+        <!--header container-->
+        <div class="header-container">
+            <p class="title is-4 chat-name">Juliano Penna</p>
+        </div>
+
+
+        <div class="panel messages-space">
+
+                <!--message box-->
+                <div class="panel-block column is-offset-1 message-box">
+
+
+                    <!--card template-->
+                    <div class="media">
+                        <figure class="media-left">
+                            <p class="image is-64x64">
+                                <img class="avatar-image" src="http://placehold.it/128x128"/>
+                            </p>
+                        </figure>
+                        <div class="media-content msg-context">
+                            <div class="content">
+                                <div class="level message-info">
+                                    <div class="level-left">
+                                        <p class="level-item client-name">John Smith<span>
+                                    </div>
+                                    <div class="level-right">
+                                        <small class="level-item">12:57</small>
+                                    </div>
+                                </div>
+                                <br>
+                                <p class="message-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                    Proin
+                                    ornare magna eros, eu
+                                    pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio
+                                    quis
+                                    feugiat facilisis.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+        </div>
+
+
+        <!--input container-->
+        <div class="input-space">
+            <div class="columns input-container no-margin-bot">
+                <figure class="column is-2 no-flex-grow">
+                    <img class="avatar-image" src="http://placehold.it/128x128">
+                </figure>
+
+                <div class="column is-10 no-flex-grow">
+                    <textarea class="textarea textbox">Type your message...</textarea>
+                    <span class="send-button-container">
+                        <button class="send-button">
+                        <span class="icon">
+                          <i class="fa fa-arrow-right send-arrow"></i>
+                        </span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+
+</body>
+</html>

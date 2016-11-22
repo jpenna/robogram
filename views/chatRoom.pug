@@ -6,22 +6,23 @@ head
     link(rel="icon" type="image/png" sizes="32x32" href="/img/favicon/favicon-32x32.png")
 
     script(src="https://code.jquery.com/jquery-3.1.1.min.js"
-    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-    crossorigin="anonymous")
+            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+            crossorigin="anonymous")
     script(src="/scripts/socket.io.js")
     script.
         socket = io();
 body
 
-    #chats(style={width: '200px', height: '100%'})
+    #chatWindow
+        #chats(style={width: '200px', height: '100%'})
 
-    div(style={float: 'right', height: '100%'})
-        #chatBox
+        div(style={float: 'right', height: '100%'})
+            #chatBox
 
-        #messageBox
-            form#messageForm(action="/sendBot" method="post")
-                input#messageInput(type="text" name="text")
-                button#sendButton(type="submit") Send
+            #messageBox
+                form#messageForm(action="/sendBot" method="post")
+                    input#messageInput(type="text" name="text")
+                    button#sendButton(type="submit") Send
 
 
     script.
@@ -47,16 +48,16 @@ body
 
         socket.on('chat message', function (msgObj) {
 
-            //        text: obj.text,
-            //                date
-            //        :
-            //        new Date(),
-            //                chat_id
-            //        :
-            //        obj.chat_id,
-            //                name
-            //        :
-            //        refs.TELEBOT_NAME
+                //        text: obj.text,
+                //                date
+                //        :
+                //        new Date(),
+                //                chat_id
+                //        :
+                //        obj.chat_id,
+                //                name
+                //        :
+                //        refs.TELEBOT_NAME
 
             chatBox.innerHTML += msgObj.name + ': ' + msgObj.text + '<br><br>';
         });
