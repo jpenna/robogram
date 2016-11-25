@@ -2,10 +2,17 @@ html
   head
     title= title
 
+    link(rel='stylesheet' href='static/stylesheets/bulma/css/bulma.css')
+
+    link(rel='stylesheet' href='static/stylesheets/css/chatRoom.css')
+
   body
     h1= message
 
-    #container !{markup}
+    #container
 
-    script(src="/bundle.js")
+    script#initialState.
+      var initialState = !{initialState}
+
+    script(src="static/scripts/bundle.js")
 

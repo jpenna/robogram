@@ -24,6 +24,9 @@ button {
   border: none;
   outline: none; }
 
+.content p:not(:last-child) {
+  margin-bottom: 0; }
+
 body {
   font-family: Ubuntu, sans-serif;
   font-weight: 400; }

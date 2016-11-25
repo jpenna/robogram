@@ -3,81 +3,53 @@ head
     meta(charset="utf-8")
     title Telebot App
 
-    link(rel="icon" type="image/png" sizes="32x32" href="/img/favicon/favicon-32x32.png")
+    link(rel="icon" type="image/png" sizes="32x32" href="static/img/favicon/favicon-32x32.png")
 
-    script(src="https://code.jquery.com/jquery-3.1.1.min.js"
-            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-            crossorigin="anonymous")
+    link(rel='stylesheet' href='static/stylesheets/bulma/css/bulma.css')
+    link(rel='stylesheet' href='static/stylesheets/font-awesome-4.7.0/css/font-awesome.min.css')
+
+    link(rel='stylesheet' href='static/stylesheets/css/chatRoom.css')
+
     script(src="/scripts/socket.io.js")
     script.
         socket = io();
 body
 
-    #chatWindow
-        #chats(style={width: '200px', height: '100%'})
+    #container
 
-        div(style={float: 'right', height: '100%'})
-            #chatBox
+    script#initialState.
+        var initialState = !{initialState}
 
-            #messageBox
-                form#messageForm(action="/sendBot" method="post")
-                    input#messageInput(type="text" name="text")
-                    button#sendButton(type="submit") Send
-
+    script(src="static/scripts/bundle.js")
 
     script.
-        var messageForm = document.getElementById('messageForm');
-        var messageInput = document.getElementById('messageInput');
-        var chatBox = document.getElementById('chatBox');
-        var chats = document.getElementById('chats');
+        socket.on('new user', function (user) {
 
-        messageForm.addEventListener('submit', function (e) {
-            e.preventDefault();
+                    let userData = {
+                        chatId: user.chat_id,
+                        first_name: user.first_name,
+                        last_name: user.last_name,
+                        avatar: user.avatar,
+                        messages: []
+                    }
 
-            var text = messageInput.value;
+            console.log(userData)
 
-            var data = {
-                text: text
-            }
-
-            socket.emit('chat message', data);
-
-            chatBox.innerHTML += 'Telebot[user]: ' + text + '<br><br>';
-            messageInput.value = "";
-        })
+            window.newUser(userData)
+        });
 
         socket.on('chat message', function (msgObj) {
 
-                //        text: obj.text,
-                //                date
-                //        :
-                //        new Date(),
-                //                chat_id
-                //        :
-                //        obj.chat_id,
-                //                name
-                //        :
-                //        refs.TELEBOT_NAME
+            let msgData = {
+                chatId: msgObj.chat_id,
+                author: msgObj.name,
+                type: msgObj.type,
+                text: msgObj.text,
+                date: msgObj.date
+            }
 
-            chatBox.innerHTML += msgObj.name + ': ' + msgObj.text + '<br><br>';
+            console.log(msgData);
+
+            window.newMessage(msgData)
         });
 
-
-        socket.on('new user', function (user) {
-            chats.innerHTML += '<div>' + user.name + '</div>';
-        });
-
-        function populateMessages (obj) {
-            $.each(obj, function(key, value) {
-                chatBox.innerHTML += value.name + ': ' + value.text + '<br><br>';
-            });
-        }
-
-        function populateClients(obj) {
-            $.each(obj, function (key, value) {
-                chats.innerHTML += '<div>' + value.name + '</div>';
-            });
-        }
-
-        populateClients(!{jsonClients});
-        populateMessages(!{jsonMessages});

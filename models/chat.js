@@ -11,20 +11,21 @@ var chatExport = {};
  * These are the schemas for conversation persistence
  *
  * */
-chatExport.models = {
-    chatModel: {
-        chat_id: null,
-        first_name: null,
-        last_name: null,
-        avatar_img: null,
-        conversation: []
-    },
-    conversationModel: {
-        name: null,
-        text: null,
-        date: null
-    }
-}
+// models = {
+//     chatModel: {
+//         chat_id: null,
+//         first_name: null,
+//         last_name: null,
+//         avatar_img: null,
+//         conversation: []
+//     },
+//     conversationModel: {
+//         name: null,
+//         type: ['bot', 'user', 'client'],
+//         text: null,
+//         date: null
+//     }
+// }
 
 /**
  * Method to create a chat document in Chats collection
@@ -36,7 +37,7 @@ chatExport.models = {
 chatExport.insertClient = function (data) {
 
     MongoClient.connect(url).then(function (db) {
-        console.log("Connected successfully to MongoDB server");
+        console.log("Insert Client");
         var collection = db.collection('chats');
 
         collection.insertOne(data, function (err, result) {
@@ -58,7 +59,7 @@ chatExport.insertClient = function (data) {
  * */
 chatExport.insertMessage = function (chatId, data) {
     MongoClient.connect(url).then(function (db) {
-        console.log("Connected successfully to MongoDB server");
+        console.log("insert message");
 
         var collection = db.collection('chats');
 
@@ -82,17 +83,18 @@ chatExport.insertMessage = function (chatId, data) {
 /**
  * Method get people in chats
  *
- * @return items promisse list of chats and conversations
+ * @return promise items list of chats and conversations
  *
  * */
 chatExport.getChat = function () {
 
     return MongoClient.connect(url).then(function (db) {
-        console.log("Connected successfully to MongoDB server");
+        console.log("get chat");
 
         var collection = db.collection('chats');
 
         return collection.find({}).toArray()
+
     }).then(function(items) {
         return items;
     });

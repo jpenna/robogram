@@ -6,13 +6,17 @@ const refs = require('../helper/refs'),
 var controller = {};
 
 controller.handleFromGui = function (data) {
-    var chatId = 231095546;
+
+    var chatId = data.chatId;
 
     var msgData = {
         name: refs.TELEBOT_GUI_NAME,
+        type: 'user',
         text: data.text,
         date: new Date()
     }
+
+    console.log(msgData);
 
     chatModel.insertMessage(chatId, msgData);
 
@@ -20,6 +24,8 @@ controller.handleFromGui = function (data) {
         chat_id: chatId,
         text: data.text
     };
+
+    console.log('formData', formData);
 
     request.post({
         url: 'https://api.telegram.org/bot266093667:AAEU-ML9BamR6jQEMPFKMcOGPdxKGrZNyCM/sendMessage',
@@ -37,6 +43,7 @@ controller.handleBotReply = function (request, response, msg) {
 
     var msgData = {
         name: 'Telebot',
+        type: 'bot',
         text: msg,
         date: new Date()
     }
@@ -52,21 +59,21 @@ controller.handleFirstContact = function (req, res) {
     var chat = {
         chat_id: req.chat.id,
         first_name: req.chat.firstname,
-        last_name: req.chat.lastname
+        last_name: req.chat.lastname,
+        avatar: 'x',
+        messages: [ ]
     }
 
     chatModel.insertClient(chat);
 
-    var user = {
-        name: chat.first_name + " " + chat.last_name
-    }
-    webIO.sendNewUser(user);
+    webIO.sendNewUser(chat);
 
 }
 
 controller.handleIncomingMessage = function (req) {
     var msgData = {
         name: req.chat.firstname,
+        type: 'client',
         text: req.text,
         date: req.date
     }
@@ -83,6 +90,7 @@ controller.handleIncomingMessage = function (req) {
 controller.sendGuiOnly = function (request, msg) {
     var msgData = {
         name: 'Telebot',
+        type: 'bot',
         text: msg,
         date: new Date()
     }

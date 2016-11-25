@@ -7,6 +7,7 @@ webIO.sendMessageChat = function (obj) {
 }
 
 webIO.sendNewUser = function (user) {
+    console.log(user);
     mySocket.emit('new user', user);
 }
 

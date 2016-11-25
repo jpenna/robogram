@@ -17,6 +17,8 @@ const server = http.listen(3000, function () {
     console.log('Listening on port 3000!');
 });
 
+
+
 mySocket = require('socket.io').listen(server);
 // usar
 
@@ -60,16 +62,33 @@ app.set('view engine', 'pug');
 // app.use(bodyParser.urlencoded({extended: false}));
 // app.use(cookieParser());
 
+// DEV
+var fs = require("fs");
+var browserify = require("browserify");
+var babelify = require("babelify");
+
+browserify({ debug: true })
+    .transform(babelify)
+    .require("src/components/TelebotApp.js", { entry: true })
+    .bundle()
+    .on("error", function (err) { console.log("Error: " + err.message); })
+    .pipe(fs.createWriteStream("src/public/scripts/bundle.js"));
+//DEV ENDD
+
+
+
 //static paths
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/static', express.static(path.join(__dirname, 'public')));
 app.use('/scripts', express.static(path.join(__dirname, 'node_modules/socket.io-client/')));
 
 app.all(telebot); //qual metodo chega? não precisa passar todos por aqui
 
-app.use('/', login);
+app.get('/', login);
+app.post('/chatroom', login)
 
 
 
+//browserify components/TelebotApp.js -t babelify --outfile public/scripts/bundle.js
 
 
 

@@ -44,74 +44,99 @@ login.get('/', function (req, res, next) {
 });
 
 
-/*TODO descomenta para voltar com o login e tira o debaixo*/
-// login.post('/sendcode', function (req, res) {
-login.get('/sendcode', function (req, res) {
-    console.log('code: ' + req.body.code);
+login.post('/chatroom', function (req, res) {
+    console.log('code: entrou no post');
 
-    // // CSRF check
-    // if (req.body.csrf_nonce === csrf_guid) {
-    //     var app_access_token = ['AA', app_id, app_secret].join('|');
-    //     var params = {
-    //         grant_type: 'authorization_code',
-    //         code: req.body.code,
-    //         access_token: app_access_token
-    //     };
-    //
-    //     // exchange tokens
-    //     var token_exchange_url = token_exchange_base_url + '?' + Querystring.stringify(params);
-    //     Request.get({url: token_exchange_url, json: true}, function (err, resp, respBody) {
-    //         var view = {
-    //             user_access_token: respBody.access_token,
-    //             expires_at: respBody.expires_at,
-    //             user_id: respBody.id
-    //         };
-    //
-    //         // get account details at /me endpoint
-    //         var me_endpoint_url = me_endpoint_base_url + '?access_token=' + respBody.access_token;
-    //         Request.get({url: me_endpoint_url, json: true}, function (err, resp, respBody) {
-    //             // send chatRoom.html
-    //             if (respBody.phone) {
-    //                 view.phone_num = respBody.phone.number;
-    //             } else if (respBody.email) {
-    //                 view.email_addr = respBody.email.address;
-    //             }
+    // CSRF check
+    if (req.body.csrf_nonce === csrf_guid) {
+        var app_access_token = ['AA', app_id, app_secret].join('|');
+        var params = {
+            grant_type: 'authorization_code',
+            code: req.body.code,
+            access_token: app_access_token
+        };
+
+        console.log('primeiro if');
+
+
+        // exchange tokens
+        var token_exchange_url = token_exchange_base_url + '?' + Querystring.stringify(params);
+        Request.get({url: token_exchange_url, json: true}, function (err, resp, respBody) {
+            var view = {
+                user_access_token: respBody.access_token,
+                expires_at: respBody.expires_at,
+                user_id: respBody.id
+            };
+
+            console.log('enviou request');
+
+
+            // get account details at /me endpoint
+            var me_endpoint_url = me_endpoint_base_url + '?access_token=' + respBody.access_token;
+            Request.get({url: me_endpoint_url, json: true}, function (err, resp, respBody) {
+                // send chatRoom.html
+                if (respBody.phone) {
+                    view.phone_num = respBody.phone.number;
+                } else if (respBody.email) {
+                    view.email_addr = respBody.email.address;
+                }
+
+                console.log('buscar chat');
+
 
                 controller.getChats()
                     .then(function (items) {
-                        console.info('em login', items);
+                        initialState = {}
+                        initialState.activeId = items[0].chat_id
+                        initialState.chats = {}
 
-                        var jsonMessages = [];
-                        var jsonClients = [];
+                        console.log('iterar chat');
+
 
                         for (let i = 0; i < items.length; i++) {
-                            jsonClients.push({
-                                name: items[i].first_name + ' ' + items[i].last_name,
-                                chat_id: items[i].chat_id,
-                                last_conversation: items[i].conversation[items[i].conversation.length - 1]
-                            });
-                            jsonMessages = items[i].conversation;
+
+                            // get basic chat info
+                            let chatInfo = {
+                                first_name: items[i].first_name,
+                                last_name: items[i].last_name,
+                                avatar: items[i].avatar,
+                                messages: []
+                            }
+
+                            // set messages in chat info
+                            for (let talk of items[i].conversation) {
+                                chatInfo.messages.push({
+                                    author: talk.name,
+                                    type: talk.type,
+                                    message: talk.text,
+                                    date: talk.date
+                                })
+                            }
+
+                            //insert in initialState
+                            initialState.chats[items[i].chat_id] = chatInfo;
                         }
 
-                        var view = {
-                            jsonMessages: JSON.stringify(jsonMessages),
-                            jsonClients: JSON.stringify(jsonClients)
-                        }
+                        console.log('renderizar chat');
 
-                        res.render('chatRoom', view);
+
+                        res.render('chatRoom', {
+                            initialState: JSON.stringify(initialState)
+                        });
 
                     }, function (err) {
                         console.error('The promise was rejected', err, err.stack);
                     });
-    //     });
-    // });
-    // }
-    // else {
-    //     // login failed
-    //     console.log("Something went wrong. :( ");
-    //     getLogin(req, res);
-    // // res.redirect(302, redirectLocation.pathname + redirectLocation.search); // isso funciona? se funcionar nao precisa separar o get login em outra funçao
-    // }
-});
+            });
+        });
+    }
+    else {
+        // login failed
+        console.log("Something went wrong. :( ");
+        getLogin(req, res);
+// res.redirect(302, redirectLocation.pathname + redirectLocation.search); // isso funciona? se funcionar nao precisa separar o get login em outra funçao
+    }
+})
+;
 
 module.exports = login;

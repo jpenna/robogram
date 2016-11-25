@@ -5,7 +5,7 @@ const mongodb_host = 'localhost',
 
 const refs = {
     MONGODB_URL: 'mongodb://' + mongodb_host + ':' + mongodb_port + '/' + mongodb_db_name,
-    TELEBOT_GUI_NAME: 'Telebot[user]',
+    TELEBOT_GUI_NAME: 'Telebot',
     TELEBOT_NAME: 'Telebot'
 }
 
