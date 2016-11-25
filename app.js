@@ -1,94 +1,23 @@
 const express = require('express');
 const path = require('path');
-// const favicon = require('serve-favicon');
-const logger = require('morgan');
-// const cookieParser = require('cookie-parser');
-// const bodyParser = require('body-parser');
-// const querystring = require('querystring');
-const request = require('request');
+const app = express();
+const http = require('http');
 
-var app = express();
+const front = require('./front/server');
 
-const login = require('./routes/login');
+const httpFront = http.Server(front);
 
-var http = require('http').Server(app);
-
-const server = http.listen(3000, function () {
-    console.log('Listening on port 3000!');
+const frontServer = httpFront.listen(3001, function () {
+    console.log('Front on port 3001!');
 });
 
 
 
-mySocket = require('socket.io').listen(server);
-// usar
-
-var webIO = require('./routes/webIO');
-
-// require('./controller/websocket')(http);
-
-const controller = require('./controller/controller');
-
-(function receiveFromSocket () {
-    mySocket.on('connection', function (socket) {
-        console.log('a user connected');
-
-        socket.on('chat message', function (data) {
-            controller.handleFromGui(data);
-        });
-
-        socket.on('disconnect', function () {
-            console.log('user disconnected');
-        });
-    });
-})();
-
-
-// var websocket = io.init(http);
-// console.log('websocket', websocket);
+// const back = require('./back/back');
 
 
 
 
-const telebot = require('./routes/telebot');
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-
-// uncomment after placing your favicon in /public
-// app.use(favicon(path.join(__dirname, 'public', 'favicon-32x32.png')));
-// app.use(logger('dev'));
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({extended: false}));
-// app.use(cookieParser());
-
-// DEV
-var fs = require("fs");
-var browserify = require("browserify");
-var babelify = require("babelify");
-
-browserify({ debug: true })
-    .transform(babelify)
-    .require("src/components/TelebotApp.js", { entry: true })
-    .bundle()
-    .on("error", function (err) { console.log("Error: " + err.message); })
-    .pipe(fs.createWriteStream("src/public/scripts/bundle.js"));
-//DEV ENDD
-
-
-
-//static paths
-app.use('/static', express.static(path.join(__dirname, 'public')));
-app.use('/scripts', express.static(path.join(__dirname, 'node_modules/socket.io-client/')));
-
-app.all(telebot); //qual metodo chega? não precisa passar todos por aqui
-
-app.get('/', login);
-app.post('/chatroom', login)
-
-
-
-//browserify components/TelebotApp.js -t babelify --outfile public/scripts/bundle.js
 
 
 
