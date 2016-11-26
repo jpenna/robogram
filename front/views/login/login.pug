@@ -56,7 +56,7 @@ body
                                 figcaption.login-figcaption E-MAIL
 
 
-    form#my_form(action="/chatroom" method="post" hidden)
+    form#my_form(action="/auth" method="post" hidden)
         input#code(type="text"  name="code")
         input#csrf_nonce(type="text" name="csrf_nonce")
 
@@ -76,6 +76,7 @@ body
         // login callback
         function loginCallback(response) {
             if (response.status === "PARTIALLY_AUTHENTICATED") {
+                console.log(response);
                 document.getElementById("code").value = response.code;
                 document.getElementById("csrf_nonce").value = response.state;
                 document.getElementById("my_form").submit();

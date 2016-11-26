@@ -24,3 +24,4 @@ configuration
 - [ ] /start checks for previous registration
 - [ ] Responsiveness: do phone layout
 - [ ] Minify bundle.js
+- [ ] Avatar user

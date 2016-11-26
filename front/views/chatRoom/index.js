@@ -1,7 +1,7 @@
 
 
 
-const renderChatRoom = require('./renderChatRoom');
+const renderChatRoom = require('./chatRoom');
 
 
 module.exports = renderChatRoom;

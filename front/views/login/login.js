@@ -1,10 +1,18 @@
 const path = require('path');
-const facebook = require('./facebook.config.js');
+const facebook = require('./facebookLogin/facebook.config.js');
+const facebookLogin = require('./facebookLogin/facebookLogin');
+const login = require('express')();
 
 //replace false for check login
 //     if (false == true) {
 //         next('chat');
 //     } else {
+
+login.get(['/login', '/'], renderLogin);
+
+login.post('/auth', facebookLogin(facebook));
+
+
 function renderLogin(req, res) {
 
     const FBLoginData = {
@@ -17,5 +25,9 @@ function renderLogin(req, res) {
 
     res.render(loginPath, FBLoginData);
 }
+
+
+
+
 
 module.exports = renderLogin;

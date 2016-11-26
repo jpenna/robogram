@@ -1,23 +1,28 @@
 const express = require('express');
 const path = require('path');
-const server = express();
+const http = require('http');
+const front = express();
 
 const login = require('./views/login');
 const chatRoom = require('./views/chatRoom');
 
 // View engine setup
-server.set('views', path.join(__dirname, 'views'));
-server.set('view engine', 'pug');
+front.set('views', path.join(__dirname, 'views'));
+front.set('view engine', 'pug');
 
 // Static paths
-server.use('/static', express.static(path.join(__dirname, 'public')));
-server.use('/scripts', express.static(path.join(__dirname, 'node_modules/socket.io-client/')));
+front.use('/static', express.static(path.join(__dirname, 'public')));
+front.use('/scripts', express.static(path.join(__dirname, 'node_modules/socket.io-client/')));
 
 // Routing
-server.get(['/', '/login'], login);
-server.get('/chatRoom', chatRoom);
+front.post('/chatroom', (req, res, next) => chatRoom(req, res, next));
+front.get(['/', '/login'], login);
 
-module.exports = server;
+
+const httpFront = http.Server(front);
+const frontServer = httpFront.listen(3001, function () {
+    console.log('Front on port 3001!');
+});
 
 
 /*

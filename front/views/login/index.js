@@ -1,6 +1,6 @@
 
 
-const renderLogin = require('./renderLogin');
+const renderLogin = require('./login');
 
 
 
