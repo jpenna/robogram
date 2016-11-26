@@ -25,3 +25,4 @@ configuration
 - [ ] Responsiveness: do phone layout
 - [ ] Minify bundle.js
 - [ ] Avatar user
+- [ ] Handle IF NO USER or even DB

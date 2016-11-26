@@ -1,82 +1,67 @@
+const chatRoom = require('express').Router();
 const path = require('path');
 const fs = require('fs');
 const http = require('http');
+const request = require('request');
+const axios = require('axios');
 const facebookLogin = require('../login/facebookLogin/facebook.config');
 
-// CSRF check
-module.exports = (req, res, next) => {
+chatRoom.get('/', function (req, res, next) {
 
-    console.log(req);
-    console.log('body', req.body);
-
-
+    // // CSRF check
     // if (req.body.csrf_nonce === this.refs.csrf_guid) {
     //     console.log("Something went wrong. :( ");
     //     // res.redirect(302, '/login');
     //
     // } else {
+
+    // facebookLogin(req, res, next, facebook).then(function () {
     //
-    //     const backServer = {
-    //         host : 'localhost',
-    //         port : '3000'
-    //     }
-    //
-    //     facebookLogin(req, res, next, facebook).then(function () {
-    //
-    //         let options = {
-    //             hostname: backServer.host,
-    //             port: backServer.port,
-    //             path: '/getInitialState',
-    //             method: 'GET',
-    //         };
-    //
-    //         let request = http.request(options, (res) => {
-    //
-    //             console.log(res);
-    //             //     initialState = {};
-    //             //     initialState.activeId = items[0].chat_id;
-    //             //     initialState.chats = {};
-    //             //
-    //             //     console.log('iterar chat');
-    //             //
-    //             //
-    //             //     for (let i = 0; i < items.length; i++) {
-    //             //
-    //             //         // get basic chat info
-    //             //         let chatInfo = {
-    //             //             first_name: items[i].first_name,
-    //             //             last_name: items[i].last_name,
-    //             //             avatar: items[i].avatar,
-    //             //             messages: []
-    //             //         }
-    //             //
-    //             //         // set messages in chat info
-    //             //         for (let talk of items[i].conversation) {
-    //             //             chatInfo.messages.push({
-    //             //                 author: talk.name,
-    //             //                 type: talk.type,
-    //             //                 message: talk.text,
-    //             //                 date: talk.date
-    //             //             })
-    //             //         }
-    //             //
-    //             //         //insert in initialState
-    //             //         initialState.chats[items[i].chat_id] = chatInfo;
-    //             //     }
-    //             //
-    //             //     console.log('renderizar chat');
-    //             //
-    //             //
-    //             //     res.render(path.join(__dirname, '.../views', 'chatRoom'), {
-    //             //         initialState: JSON.stringify(initialState)
-    //             //     });
-    //             //
-    //             // }, function (err) {
-    //             //     console.error('The promise was rejected', err, err.stack);
-    //             // });
-    //         });
-    //
-    //         request.end();
-    //     });
-    // }
-}
+
+    axios.get('http://localhost:3000/getInitialState').then(function (response) {
+
+        const items = response.data;
+
+
+        console.log(items);
+        var initialState = {};
+        initialState.activeId = items[0].chat_id;
+        initialState.chats = {};
+
+        console.log('iterar chat');
+
+
+        for (let item of items) {
+
+            // get basic chat info
+            let chatInfo = {
+                first_name: item.first_name,
+                last_name: item.last_name,
+                avatar: item.avatar,
+                messages: []
+            }
+
+            // set messages in chat info
+            for (let talk of item.conversation) {
+                chatInfo.messages.push({
+                    author: talk.name,
+                    type: talk.type,
+                    message: talk.text,
+                    date: talk.date
+                })
+            }
+
+            //insert in initialState
+            initialState.chats[item.chat_id] = chatInfo;
+        }
+
+        res.render('chatRoom/chatRoom', {initialState: JSON.stringify(initialState)});
+
+    }).catch(function (error) {
+        console.log(error);
+
+    });
+});
+
+
+module.exports = chatRoom;

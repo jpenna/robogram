@@ -1,7 +1,7 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
-const ChatList = require('./ChatList');
-const ChatContainer = require('./MessagesPanel');
+const ChatList = require('./chatsList/ChatList.react');
+const MessagesPanel = require('./messagesPanel/MessagesPanel.react');
 
 class ChatRoom extends React.Component {
 
@@ -110,7 +110,7 @@ class ChatRoom extends React.Component {
     }
 
     scrollBottom() {
-        var messageArea = document.getElementsByClassName("messages-space");
+        var messageArea = document.getElementsByClassName("messages-container");
         messageArea[0].scrollTop = messageArea[0].scrollHeight;
     }
 
@@ -118,7 +118,7 @@ class ChatRoom extends React.Component {
         return (
             <div className="box columns column is-10 is-offset-1 telebot-app">
                 <ChatList chats={this.state.chats} activeId={this.state.activeId} changeActive={this.changeActive}/>
-                <ChatContainer chats={this.state.chats} activeId={this.state.activeId} name={this.state.name}
+                <MessagesPanel chats={this.state.chats} activeId={this.state.activeId} name={this.state.name}
                                newMessage={this.newMessage}/>
             </div>
         )

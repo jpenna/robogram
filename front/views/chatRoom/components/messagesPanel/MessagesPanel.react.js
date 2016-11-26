@@ -1,6 +1,6 @@
 const React = require('react');
 const HeaderContainer = require('./HeaderContainer.react');
-const MessagesContainer = require('./MessagesContainer.react.js');
+const MessagesContainer = require('./MessagesContainer.react');
 const InputContainer = require('./InputContainer.react');
 
 class MessagesPanel extends React.Component {

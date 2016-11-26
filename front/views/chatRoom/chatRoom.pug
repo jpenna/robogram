@@ -12,12 +12,13 @@ head
 
     script(src="/scripts/socket.io.js")
     script.
-        socket = io();
+        var socket = io('http://localhost:3000');
 body
 
     #container
 
-    script#initialState(src="/initState")
+    script#initialState.
+        initialState = !{initialState}
     script(src="static/scripts/bundle.js")
     script(src="static/scripts/socketMethods.js")
 

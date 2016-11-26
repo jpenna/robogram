@@ -1,7 +1,7 @@
 const path = require('path');
 const facebook = require('./facebookLogin/facebook.config.js');
 const facebookLogin = require('./facebookLogin/facebookLogin');
-const login = require('express')();
+const login = require('express').Router();
 
 //replace false for check login
 //     if (false == true) {
@@ -21,13 +21,7 @@ function renderLogin(req, res) {
         version: facebook.account_kit_api_version
     };
 
-    const loginPath = path.join(__dirname, '/login');
-
-    res.render(loginPath, FBLoginData);
+    res.render('login/login', FBLoginData);
 }
 
-
-
-
-
-module.exports = renderLogin;
+module.exports = login;
