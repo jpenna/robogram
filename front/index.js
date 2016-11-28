@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
 const http = require('http');
+const facebookLogin = require('./views/authentication/facebookLogin');
+const authenticate = require('./views/authentication/authenticate');
 const front = express();
 
 const chatRoom = require('./views/chatRoom');
@@ -15,32 +17,32 @@ front.use('/scripts', express.static(path.join(__dirname, '../node_modules/socke
 front.set('views', path.join(__dirname, 'views'));
 front.set('view engine', 'pug');
 
-
 // Routing
-front.use('/chatRoom', chatRoom);
-front.use(['/', '/login'], login);
+front.post('/auth', facebookLogin);
+front.get(['/login', '/'], login);
 
+front.use(authenticate);
+front.get('/chatRoom', chatRoom);
+
+front.use((req, res) => {
+    res.redirect(404, '/login');
+})
 
 const httpFront = http.Server(front);
 const frontServer = httpFront.listen(3001, function () {
     console.log('Front on port 3001!');
 });
 
+module.exports = front;
 
-// // render bundle.js on the fly
-// var fs = require("fs");
-// var browserify = require("browserify");
-// var babelify = require("babelify");
-//
-// browserify({debug: true})
-//     .transform(babelify)
-//     .require("src/front/views/chatRoom/components/chatRoom.react.js", {entry: true})
-//     .bundle()
-//     .on("error", function (err) {
-//         console.log("Error: " + err.message);
-//     })
-//     .pipe(fs.createWriteStream("src/front/public/scripts/bundle.js"));
-// //DEV ENDD
+
+
+
+
+
+
+
+
 
 
 

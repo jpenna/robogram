@@ -1,12 +1,22 @@
-module.exports = (db, chatId, data) => {
+const checkIfChatExists = require('../find/checkIfChatExists');
+
+
+module.exports = (db, data) => {
     console.log("insert message");
 
     var collection = db.collection('chats');
 
-    collection.updateOne({"chat_id": chatId},
-        {
-            $push: {"conversation": data}
-        },
+    var model = {
+        name: data.name,
+        type: data.type,
+        text: data.text,
+        date: data.date
+    }
+
+    console.log('MODEL INSERT MESSAGE', model);
+
+    collection.updateOne({"chat_id": data.id},
+        {$push: {"conversation": model}},
         function (err, result) {
             db.close();
             if (err === null) {

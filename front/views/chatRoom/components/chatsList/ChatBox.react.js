@@ -61,7 +61,7 @@ class ChatBox extends React.Component {
                 <div className="media">
                     <figure className="media-left">
                         <p className="image is-64x64 is-50x50">
-                            <img className="avatar-image" src="http://placehold.it/128x128"/>
+                            <img className="avatar-image" src="static/img/avatar-placeholder.png"/>
                         </p>
                     </figure>
                     <div className="media-content">

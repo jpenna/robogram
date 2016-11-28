@@ -1,4 +1,4 @@
-const React = require('react')
+const React = require('react');
 const ChatBox = require('./ChatBox.react');
 
 class ChatList extends React.Component {
@@ -9,18 +9,20 @@ class ChatList extends React.Component {
         const chatList = this.props.chats;
 
         for (let key in chatList) {
-            let chat = chatList[key]
-            let lastKey = chat.messages.length - 1;
+            let chat = chatList[key];
+            let lastKey = chat.conversation.length - 1;
 
-            list.push(
-                <ChatBox key={key}
-                         id={key}
-                         name={chat.first_name}
-                         date={chat.messages[lastKey].date}
-                         lastMessage={chat.messages[lastKey].message}
-                         activeId={this.props.activeId}
-                         changeActive={this.props.changeActive}/>
-            )
+            if (chat.conversation[lastKey] != undefined) {
+                list.push(
+                    <ChatBox key={key}
+                             id={key}
+                             name={chat.first_name}
+                             date={chat.conversation[lastKey].date}
+                             lastMessage={chat.conversation[lastKey].message}
+                             activeId={this.props.activeId}
+                             changeActive={this.props.changeActive}/>
+                )
+            }
         }
 
         return (

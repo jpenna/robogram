@@ -1,22 +1,19 @@
-describe('getConversationModel', function () {
-    var getMessageModel = require('./getMessageModel');
-
-    // beforeEach(function () {
-    //     var getMessageModel = getMessageModel;
-    // })
+describe('getMessageModel', function () {
+    var getMessageModel = require('../getMessageModel');
 
     it('should return JSON formatted for db insertion', function () {
 
-        let model = {
+        let data = {
+            id: 1,
             name: 'name',
             type: 'type',
             text: 'text',
             date: new Date(10)
         }
 
-        let returned = getMessageModel('name', 'type', 'text', new Date(10));
+        let returned = getMessageModel(data);
 
-        expect(model).toEqual(returned);
+        expect(data).toEqual(returned);
     });
 
 })

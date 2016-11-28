@@ -30,7 +30,7 @@ class ChatRoom extends React.Component {
         }
 
         let newChat = this.state.chats;
-        newChat[chatId].messages.push(chatMessage);
+        newChat[chatId].conversation.push(chatMessage);
 
         this.setState({chats: newChat})
     }
@@ -38,25 +38,35 @@ class ChatRoom extends React.Component {
     insertNewClient(clientData) {
 
         let client = {
+            chat_id: clientData.chatId,
             first_name: clientData.first_name,
             last_name: clientData.last_name,
             avatar: clientData.avatar,
-            messages: [{
-                author: clientData.first_name,
-                type: 'client',
-                message: '/start',
-                date: new Date()
-            }]
+            conversation: []
         }
 
-        let chats = this.state.chats
-        chats[clientData.chatId] = client
+        let chats = this.state.chats;
+        chats[clientData.chatId] = client;
 
         this.setState({chats: chats});
 
     }
 
     componentWillMount() {
+        window.newUser = (data) => {
+
+            let client = {
+                chatId: data.chat_id,
+                first_name: data.first_name,
+                last_name: data.last_name,
+                avatar: data.avatar,
+                conversation: []
+            }
+
+            this.insertNewClient(client)
+
+        }
+
         window.newMessage = (data) => {
 
             let chatId = data.chatId;
@@ -69,18 +79,7 @@ class ChatRoom extends React.Component {
 
         };
 
-        window.newUser = (data) => {
 
-            let client = {
-                chatId: data.chat_id,
-                first_name: data.first_name,
-                last_name: data.last_name,
-                avatar: data.avatar
-            }
-
-            this.insertNewClient(client)
-
-        }
     }
 
     componentDidMount() {
@@ -98,10 +97,10 @@ class ChatRoom extends React.Component {
     newMessage(message) {
 
         let activeChat = this.state.activeId;
-        let author = 'Telebot'
-        let type = 'user'
-        let text = message.message
-        let date = message.date
+        let author = 'Telebot';
+        let type = 'user';
+        let text = message.message;
+        let date = message.date;
 
         this.socket.emit('chat message', {chatId: activeChat, type: type, text: text});
 

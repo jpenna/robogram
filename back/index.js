@@ -1,12 +1,11 @@
 const app = require('express')();
 const http = require('http');
-const errors= require('./errors');
 const socketIO = require('socket.io');
 const telebot = require('./bot');
 const models = require('./models');
 
 const server = http.Server(app);
-const backServer = server.listen(3000, function () {
+server.listen(3000, function () {
     console.log('Server back listen on 3000!')
 });
 
@@ -24,6 +23,3 @@ app.get('/getInitialState', (req, res) => {
 app.all(function (req, res, next) {
     console.log(req);
 })
-
-
-// errors(app);

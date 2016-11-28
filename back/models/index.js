@@ -3,16 +3,19 @@ const insertNewChat = require('./insert/insertChat');
 const insertNewMessage = require('./insert/insertMessage');
 const MongoClient = require('mongodb').MongoClient;
 const config = require('./../config');
+const model = require('./model');
 
 const url = config.MONGODB_URL;
 
 function connectMongo() {
-    return MongoClient.connect(url);
+    return MongoClient.connect(url).catch(function (err) {
+        console.log('Failed to connect MongoDB: ', err.message);
+    });
 }
 
-function insertMessage (chatId, msgData) {
+function insertMessage (msgData) {
     connectMongo().then((db) => {
-        insertNewMessage(db, chatId, msgData);
+        insertNewMessage(db, msgData);
     })
 }
 
@@ -33,5 +36,6 @@ function getInitialState (req, res) {
 module.exports = {
     getInitialState,
     insertMessage,
-    insertChat
+    insertChat,
+    model
 }

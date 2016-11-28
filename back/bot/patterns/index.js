@@ -1,2 +1,6 @@
+const searchPatterns = require('./searchPatterns');
 
-module.exports = require('./searchPatterns');
+
+module.exports = {
+    searchPatterns
+}

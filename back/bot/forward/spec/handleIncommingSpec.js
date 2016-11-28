@@ -28,15 +28,6 @@ describe('handleIncomming', function () {
         expect(models.insertMessage).toHaveBeenCalled();
     });
 
-    it('should call sendMessage (Web Socket)', function () {
-        spyOn(websocket, 'sendMessage');
-
-        handleIncomming(msg, res, websocket);
-
-        expect(websocket.sendMessage).toHaveBeenCalled();
-
-    });
-
     it('should call getMessageModel (DB model)', function () {
         spyOn(models.model, 'getMessageModel');
 
@@ -45,9 +36,8 @@ describe('handleIncomming', function () {
         expect(models.model.getMessageModel).toHaveBeenCalled();
     });
 
-    it('should call patterns (respond to Client)', function () {
+    it('should call sendTelegram', function () {
         spyOn(patterns, 'searchPatterns');
-
 
         handleIncomming(msg, res, websocket);
 

@@ -7,9 +7,9 @@ head
     link(rel='stylesheet' href='static/stylesheets/css/utils.css')
     link(rel='stylesheet' href='static/stylesheets/css/login.css')
 
+    script(src="https://sdk.accountkit.com/en_US/sdk.js")
 
 body
-    script(src="https://sdk.accountkit.com/en_US/sdk.js")
     script.
         window.fbAsyncInit = function () {
             FB.init({
@@ -30,6 +30,7 @@ body
             js.src = "//connect.facebook.net/en_US/sdk.js";
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
+
 
     .login-box
         .login-welcome-box
@@ -60,15 +61,15 @@ body
         input#code(type="text"  name="code")
         input#csrf_nonce(type="text" name="csrf_nonce")
 
-    script.
 
+    script.
         // initialize Account Kit with CSRF protection
         AccountKit_OnInteractive = function () {
             AccountKit.init(
                     {
-                        appId: '1647210538911602',
-                        state: "#{csrf}",
-                        version: "#{version}"
+                        appId: #{appId},
+                        state: '#{csrf}',
+                        version: '#{apiVersion}'
                     }
             )
         }
@@ -101,6 +102,9 @@ body
         function email_btn_onclick() {
             AccountKit.login('EMAIL', {emailAddress: null}, loginCallback);
         }
+
+
+
 
 
 

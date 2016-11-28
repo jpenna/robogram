@@ -1,4 +1,4 @@
-module.exports = (db, res) => {
+module.exports = (db) => {
     console.log("Get All Chats module");
 
     var collection = db.collection('chats');

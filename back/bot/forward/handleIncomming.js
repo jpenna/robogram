@@ -1,19 +1,21 @@
-const models = require('../models');
-const config = require('../config');
+const models = require('../../models/index');
+const patterns = require('../patterns');
+
 
 module.exports = (msg, res, websocket) => {
 
-    let chatId = msg.chat.id;
-
-    let msgData = {
+    let data = {
+        id: msg.chat.id,
         name: msg.chat.name,
         type: 'client',
         text: msg.text,
         date: new Date()
     }
 
-    models.insertMessage(chatId, msgData);
+    let msgData = models.model.getMessageModel(data);
 
-    msgData.chat_id = chatId;
+    models.insertMessage(msgData);
     websocket.sendMessage(msgData);
+
+    patterns.searchPatterns(msg, res, websocket);
 }

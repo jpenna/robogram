@@ -13,12 +13,16 @@ head
     script(src="/scripts/socket.io.js")
     script.
         var socket = io('http://localhost:3000');
+
 body
 
-    #container
+    .center-page.no-chat.
+        Nenhum chat iniciado
 
-    script#initialState.
-        initialState = !{initialState}
-    script(src="static/scripts/bundle.js")
-    script(src="static/scripts/socketMethods.js")
+
+    script(src="static/scripts/bundle.min.js")
+    script.
+        socket.on('new client', function () {
+            location.reload();
+        });
 

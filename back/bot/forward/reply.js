@@ -1,18 +1,22 @@
-const models = require('../../models');
+const models = require('../../models/index');
 const config = require('../../config');
 
-module.exports = (chatId, message, res, websocket) => {
+module.exports = (msg, message, res, websocket) => {
     res.text(message); //reply with BOT
 
-    var msgData = {
-        name: config.TELEBOT_NAME,
+    let data = {
+        id: msg.chat.id,
+        name: config.BOT_NAME,
         type: 'bot',
         text: message,
         date: new Date()
     }
 
-    models.insertMessage(chatId, msgData);
+    let msgData = models.model.getMessageModel(data);
 
-    msgData.chat_id = chatId;
+
+    console.log('REPLY: ', msgData);
+
+    models.insertMessage(msgData);
     websocket.sendMessage(msgData);
 }

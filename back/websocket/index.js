@@ -1,20 +1,10 @@
-const receiveMessage = require('./receiveMessage');
 const sendNewChat = require('./sendNewChat');
 const sendNewMessage = require('./sendNewMessage');
+const prepareConnection = require('./prepareConnection');
 
 function initSocket(socket) {
-    socket.on('connection', function (socket) {
-        console.log('a user connected');
-        socket.on('disconnect', function () {
-            console.log('user disconnected');
-        });
 
-        socket.on('chat message', function (data) {
-            receiveMessage(data);
-        });
-
-
-    });
+    prepareConnection(socket);
 
     return {
         sendMessage: sendNewMessage(socket),

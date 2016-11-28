@@ -3,25 +3,22 @@ const bot = require('../bot');
 const config = require('./../config');
 
 module.exports = (data) => {
-    var chatId = data.chatId;
 
-    var msgData = {
-        name: config.TELEBOT_NAME,
+    let msgData = {
+        id: data.id,
+        name: config.BOT_NAME,
         type: 'user',
         text: data.text,
         date: new Date()
     }
 
-    console.log(msgData);
-
-    models.insertMessage(chatId, msgData);
+    let msgModel = models.model.getMessageModel(msgData);
+    models.insertMessage(msgModel);
 
     var formData = {
-        chat_id: chatId,
+        chat_id: data.chatId,
         text: data.text
     };
-
-    console.log('formData', formData);
 
     bot.sendTelegram(formData);
 }
