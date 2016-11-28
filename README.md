@@ -30,7 +30,8 @@ Start 2 services in NodeJs:
 ####Application
 1. Access [http://localhost:3001]()
 2. Do login by e-mail or SMS
-   > Since the login needs a HTTPS connection, you may use a tunneler (like ngrok). 
+   > Since the login needs a HTTPS connection, you may use a tunneler (like ngrok).
+   If you use a tunneler, you will have to setup a Facebook Account Kit application and configure it here in *front/views/authentication/config.js* 
    However, the Websocket uses a HTTP connection and, therefore, won't work with the HTTPS. 
    Said that, you may try authentication, but to use the app you may enter the page directly.
    
