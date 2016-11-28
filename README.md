@@ -28,7 +28,7 @@ Start 2 services in NodeJs:
 * Back: `/src/back/index.js` (port: 3000)
 
 ####Application
-1. Access [http://localhost:3001]()
+1. Access [http://localhost:3001](http://localhost:3001)
 2. Do login by e-mail or SMS
    > Since the login needs a HTTPS connection, you may use a tunneler (like ngrok).
    If you use a tunneler, you will have to setup a Facebook Account Kit application and configure it here in *front/views/authentication/config.js* 
@@ -38,7 +38,7 @@ Start 2 services in NodeJs:
        In fact, loggin isn't implemented right 
        (there is no real authentication process)
    
-3. Enter [http://localhost:3001/chatRoom]()
+3. Enter [http://localhost:3001/chatRoom](http://localhost:3001/chatRoom)
    > HTTP Websocket and HTTP connection
 4. Start a connection with the Bot in Telegram
 5. Talk
